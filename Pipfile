@@ -6,6 +6,9 @@ name = "pypi"
 [packages]
 flask = "*"
 python-dotenv = "*"
+gunicorn = "==20.1.0"
+eventlet = "==0.30.2"
+greenlet = "==1.1.2"
 
 [dev-packages]
 
