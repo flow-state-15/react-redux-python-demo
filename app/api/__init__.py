@@ -1,1 +1,3 @@
-from .main import main_route
+from .gif import gif_route
+from .posts import posts_route
+
