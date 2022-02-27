@@ -1,1 +1,1 @@
-FLASK_APP=app
+FLASK_APP=flask_backend
