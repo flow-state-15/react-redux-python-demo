@@ -50,7 +50,7 @@ function App() {
 
             <main className="App-main">
               <Gif />
-              {/* <Posts /> */}
+              <Posts />
             </main>
 
           </div>

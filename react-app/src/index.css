@@ -1,3 +1,15 @@
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+}
+
 .App {
   text-align: center;
 }
@@ -26,13 +38,6 @@
   }
 }
 
-.App-main {
-  display: flex;
-  width: 100%;
-  flex-direction: column;
-  align-items: center;
-}
-
 .App-header {
   height: 150px;
   display: flex;
@@ -45,14 +50,16 @@
   padding: 30px;
 }
 
-.App-footer {
-  width: 100%;
-  text-align: center;
-}
-
 .App-header img {
   width: 300px;
   height: 200px;
+}
+
+.App-main {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
 }
 
 .gif-wrapper {
@@ -65,6 +72,14 @@
   display: flex;
   flex-direction: column;
   width: 400px;
+}
+
+.App-footer {
+  width: 100%;
+  background-color: #282c34;
+  color: #fff;
+  text-align: center;
+  margin-top: auto;
 }
 
 .btn {
