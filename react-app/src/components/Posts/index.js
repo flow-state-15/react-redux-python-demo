@@ -29,16 +29,16 @@ export default function Posts() {
     dispatch(delete_post(post_id));
   };
 
-  const handle_create_comment = () => {
-    dispatch(create_comment());
+  const handle_create_comment = (post_id) => {
+    dispatch(create_comment({ content: "comment id", post_id }));
   };
 
-  const handle_create_subcomment = () => {
-    dispatch(create_subcomment());
+  const handle_create_subcomment = (comment_id) => {
+    dispatch(create_subcomment({ content: "subcomment id", comment_id }));
   };
 
-  const handle_delete_comment = (comment_id) => {
-    dispatch(delete_comment(comment_id));
+  const handle_delete_comment = (ids) => {
+    dispatch(delete_comment(ids));
   };
 
   const handle_delete_subcomment = (subcomment_id) => {
@@ -48,6 +48,7 @@ export default function Posts() {
   const posts = p_from_reducer
     ? p_from_reducer.map((post) => {
         const child_props = {
+            post_id: post.id,
           comments: post.comments,
           handle_create_c: handle_create_comment,
           handle_create_sub: handle_create_subcomment,
@@ -61,7 +62,7 @@ export default function Posts() {
             <button type="button" onClick={() => handle_delete_posts(post.id)}>
               delete post
             </button>
-            <button type="button" onClick={handle_create_comment}>
+            <button type="button" onClick={() => handle_create_comment(post.id)}>
               new comment
             </button>
             {post.comments ? <Comments props={child_props} /> : null}

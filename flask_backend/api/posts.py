@@ -26,7 +26,8 @@ def create_post():
 
 @posts_routes.route('/delete/post/<id>', methods=['DELETE'])
 def delete_post(id):
-    Post.query.filter(Post.id == id).delete()
+    post = Post.query.filter(Post.id == id).first()
+    db.session.delete(post)
     db.session.commit()
     return f"Deleted post id {id}"
 
@@ -38,7 +39,7 @@ def create_comment():
     if request.method == 'POST':
         data = request.get_json(force=True)
 
-        comment = Comment(content=data["content"])
+        comment = Comment(content=data["content"], post_id=data["post_id"])
         db.session.add(comment)
         db.session.flush()
         comment.content = f"{comment.content}: {comment.id}"
@@ -53,7 +54,8 @@ def create_comment():
 
 @posts_routes.route('/delete/comment/<id>', methods=['DELETE'])
 def delete_comment(id):
-    Comment.query.filter(Comment.id == id).delete()
+    comment = Comment.query.filter(Comment.id == id).first()
+    db.session.delete(comment)
     db.session.commit()
     return f"Deleted comment by id {id}"
 
@@ -65,7 +67,7 @@ def create_subcomment():
     if request.method == 'subcomment':
         data = request.get_json(force=True)
 
-        subcomment = SubComment(content=data["content"])
+        subcomment = SubComment(content=data["content"], comment_id=data["comment_id"])
         db.session.add(subcomment)
         db.session.flush()
         subcomment.content = f"{subcomment.content}: {subcomment.id}"

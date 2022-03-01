@@ -3,13 +3,11 @@ import thunk from 'redux-thunk';
 import session from './session';
 import gif from './gif';
 import posts from './posts';
-import comments from './comments';
 
 const rootReducer = combineReducers({
   session,
   gif,
   posts,
-  comments
 });
 
 
