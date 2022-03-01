@@ -1,11 +1,21 @@
 import { useDispatch, useSelector } from "react-redux";
 
-import { create_post, get_all_posts, delete_post } from "../../store/posts";
-
+import {
+  create_post,
+  get_all_posts,
+  delete_post,
+  create_comment,
+  create_subcomment,
+  delete_comment,
+  delete_subcomment,
+  get_all_comments,
+  get_all_subcomments,
+} from "../../store/posts";
+import Comments from "../Comments";
 
 export default function Posts() {
   const dispatch = useDispatch();
-    const p_from_reducer = useSelector((state) => state.posts?.all_posts);
+  const p_from_reducer = useSelector((state) => state.posts.all_posts);
 
   const handle_create_post = () => {
     dispatch(create_post({ content: "post id" }));
@@ -17,26 +27,49 @@ export default function Posts() {
 
   const handle_delete_posts = (post_id) => {
     dispatch(delete_post(post_id));
-  }
+  };
 
-    const posts = p_from_reducer ? p_from_reducer.map((post) => (
-      <li>
-        {post.content}
-        <button type="button" onClick={() => handle_delete_posts(post.id)}>delete post</button>
-        {post.comments
-          ? post.comments.map((comment) => (
-              <li>
-                {comment.content}
-                {comment.subcomments
-                  ? comment.subcomments.map((subcomment) => (
-                      <li>{subcomment.content}</li>
-                    ))
-                  : null}
-              </li>
-            ))
-          : null}
-      </li>
-    )) : null;
+  const handle_create_comment = (post_id) => {
+    dispatch(create_comment({ content: "comment id", post_id }));
+  };
+
+  const handle_create_subcomment = (comment_id) => {
+    dispatch(create_subcomment({ content: "subcomment id", comment_id }));
+  };
+
+  const handle_delete_comment = (ids) => {
+    dispatch(delete_comment(ids));
+  };
+
+  const handle_delete_subcomment = (subcomment_id) => {
+    dispatch(delete_subcomment(subcomment_id));
+  };
+
+  const posts = p_from_reducer
+    ? p_from_reducer.map((post) => {
+        const child_props = {
+            post_id: post.id,
+          comments: post.comments,
+          handle_create_c: handle_create_comment,
+          handle_create_sub: handle_create_subcomment,
+          handle_delete_c: handle_delete_comment,
+          handle_delete_sub: handle_delete_subcomment,
+        };
+
+        return (
+          <li>
+            {post.content}
+            <button type="button" onClick={() => handle_delete_posts(post.id)}>
+              delete post
+            </button>
+            <button type="button" onClick={() => handle_create_comment(post.id)}>
+              new comment
+            </button>
+            {post.comments ? <Comments props={child_props} /> : null}
+          </li>
+        );
+      })
+    : null;
 
   return (
     <div className="posts-wrapper">
