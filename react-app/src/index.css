@@ -3,11 +3,22 @@ body,
 #root {
   height: 100%;
   margin: 0;
+  font-family: "Comic Sans MS";
+  font-family: "Lucida Sans";
 }
 
 #root {
   display: flex;
   flex-direction: column;
+}
+
+a {
+  text-decoration: none;
+}
+
+a:hover {
+  /* color: lightblue; */
+  text-decoration: underline;
 }
 
 .App {
@@ -96,5 +107,11 @@ body,
   display: flex;
   justify-content: space-around;
   padding: 10px;
+  background-color: lightblue;
+  margin-bottom: 10px;
+}
 
+.gif-blurb-wrap, .nesting-blurb-wrap {
+  width: 600px;
+  padding: 20px;
 }
