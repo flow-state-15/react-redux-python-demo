@@ -13,6 +13,7 @@ import Footer from './components/Footer';
 import Gif from './components/Gif';
 
 import { authenticate } from "./store/session";
+import { get_all_posts } from "./store/posts"
 
 function App() {
   const [loaded, setLoaded] = useState(false);
@@ -21,6 +22,7 @@ function App() {
   useEffect(() => {
     (async () => {
       await dispatch(authenticate());
+      dispatch(get_all_posts());
       setLoaded(true);
     })();
   }, [dispatch]);
@@ -50,7 +52,7 @@ function App() {
 
             <main className="App-main">
               <Gif />
-              {/* <Posts /> */}
+              <Posts />
             </main>
 
           </div>

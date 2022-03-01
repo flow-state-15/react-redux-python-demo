@@ -1,7 +1,7 @@
 export default function Footer() {
   return (
     <div className="App-footer">
-      <p>react redux eod series</p>
+      <h2>react redux eod series</h2>
     </div>
   );
 }
