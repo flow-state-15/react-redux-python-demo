@@ -49,7 +49,7 @@ export default function Posts() {
     ? p_from_reducer.map((post) => {
         const child_props = {
             post_id: post.id,
-          comments: post.comments,
+          comments: post.comments.all,
           handle_create_c: handle_create_comment,
           handle_create_sub: handle_create_subcomment,
           handle_delete_c: handle_delete_comment,
