@@ -3,24 +3,29 @@ from ..models import db, Post, Comment, SubComment
 
 posts_routes = Blueprint('posts', __name__)
 
-incretment = 0
+
 
 @posts_routes.route('/', methods=['GET','POST'])
 def create_post():
 
-    global increment
-
     if request.method == 'POST':
-        increment += 1
-        content = f'post number {increment}'
+        data = request.get_json(force=True)
 
-        post = Post(content=content)
-
+        post = Post(content=data["content"])
         db.session.add(post)
+        db.session.flush()
+        post.content = f"{post.content}: {post.id}"
         db.session.commit()
 
         return post.to_dict()
 
     posts = Post.query.all()
+    
+    return { "posts": sorted([p.to_dict() for p in posts], key=lambda p: p["id"], reverse=True) }
 
-    return { "posts": [p.to_dict() for p in posts]}
+
+@posts_routes.route('/delete/<id>', methods=['DELETE'])
+def delete_post(id):
+    Post.query.filter(Post.id == id).delete()
+    db.session.commit()
+    return f"Deleted post id {id}"
