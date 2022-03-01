@@ -91,3 +91,10 @@ body,
 .nav-link {
   color: white;
 }
+
+.nav-banner-wrapper {
+  display: flex;
+  justify-content: space-around;
+  padding: 10px;
+
+}

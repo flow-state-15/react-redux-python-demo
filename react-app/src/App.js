@@ -5,6 +5,8 @@ import { useDispatch } from "react-redux";
 import LoginForm from "./components/auth/LoginForm";
 import SignUpForm from "./components/auth/SignUpForm";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
+import NavBanner from "./components/NavBanner";
+import SplashPage from "./components/SplashPage"
 import UsersList from "./components/UsersList";
 import User from "./components/User";
 import Header from "./components/Header";
@@ -34,6 +36,7 @@ function App() {
   return (
     <BrowserRouter>
       <Header />
+      <NavBanner />
       <Switch>
         <Route path="/login" exact={true}>
           <LoginForm />
@@ -48,13 +51,20 @@ function App() {
           <User />
         </ProtectedRoute>
         <ProtectedRoute path="/" exact={true}>
+          <SplashPage />
+        </ProtectedRoute>
+        <ProtectedRoute path="/gif-demo" exact={true}>
           <div className="App">
-
             <main className="App-main">
               <Gif />
+            </main>
+          </div>
+        </ProtectedRoute>
+        <ProtectedRoute path="/posts-demo" exact={true}>
+          <div className="App">
+            <main className="App-main">
               <Posts />
             </main>
-
           </div>
         </ProtectedRoute>
       </Switch>
