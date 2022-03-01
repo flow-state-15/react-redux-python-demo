@@ -5,7 +5,7 @@ import { create_post, get_all_posts, delete_post } from "../../store/posts";
 
 export default function Posts() {
   const dispatch = useDispatch();
-    const p_from_reducer = useSelector((state) => state.posts?.all_posts);
+    const p_from_reducer = useSelector((state) => state.posts.all_posts);
 
   const handle_create_post = () => {
     dispatch(create_post({ content: "post id" }));
@@ -19,10 +19,15 @@ export default function Posts() {
     dispatch(delete_post(post_id));
   }
 
+  const handle_create_comment = () => {
+      dispatch(create_comment());
+  }
+
     const posts = p_from_reducer ? p_from_reducer.map((post) => (
       <li>
         {post.content}
         <button type="button" onClick={() => handle_delete_posts(post.id)}>delete post</button>
+        <button type="button" onClick={handle_create_comment}>new comment</button>
         {post.comments
           ? post.comments.map((comment) => (
               <li>
