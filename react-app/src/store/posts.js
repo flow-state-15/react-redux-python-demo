@@ -72,9 +72,9 @@ const all_subcomments = (subcomments) => ({
   subcomments
 })
 
-const del_subcomment_action = (subcomment_id) => ({
+const del_subcomment_action = (ids) => ({
   type: remove_s,
-  subcomment_id: subcomment_id
+  ...ids
 })
 
 // const new_error = (error) => ({
@@ -97,6 +97,7 @@ export const create_post = (post) => async (dispatch) => {
 
   if (response.ok) {
     const post = await response.json();
+    console.log("<<<< new post from backend, post:: ", post)
     dispatch(add_post(post));
   } else {
     const error = {
@@ -223,14 +224,14 @@ export const get_all_subcomments = () => async (dispatch) => {
   }
 }
 
-export const delete_subcomment = (subcomment_id) => async (dispatch) => {
-  console.log("delete_subcomment", subcomment_id);
-  const response = await fetch(`/api/posts/delete/subcomment/${subcomment_id}`, {
+export const delete_subcomment = (ids) => async (dispatch) => {
+  console.log("delete_subcomment", ids.subcomment_id);
+  const response = await fetch(`/api/posts/delete/subcomment/${ids.subcomment_id}`, {
     method: "DELETE",
   });
 
   if (response.ok) {
-    dispatch(del_subcomment_action(subcomment_id));
+    dispatch(del_subcomment_action(ids));
   }
 }
 
@@ -241,9 +242,18 @@ export default function reducer(state = {all_posts: []}, action){
   //normalize an array into object kvp's
   const update_keys = (array) => {
     const obj = {}
-    array.forEach(p => obj[p.id] = p)
+    array.forEach(i => {
+      console.log(i)
+      obj[i.id] = i
+      if (i.hasOwnProperty("comments")){
+        obj[i.id].comments = { ...update_keys(i.comments), all: i.comments}
+      } else if (i.hasOwnProperty("subcomments")){
+        obj[i.id].subcomments = { ...update_keys(i.subcomments), all: i.subcomments}
+      }
+    });
     return obj
   }
+
   //prep newState for multiple cases
   const newState = { ...state };
 
@@ -252,7 +262,8 @@ export default function reducer(state = {all_posts: []}, action){
 
     //posts cases ================================================
     case create:
-      return {...state, [action.post.id]: action.post, all_posts: [action.post, ...state.all_posts] }
+      const new_post = {id: action.post.id, content: action.post.content, comments: { all: action.post.comments}}
+      return {...state, [action.post.id]: new_post, all_posts: [action.post, ...state.all_posts] }
 
     case get:
       return { ...state, ...update_keys(action.posts), all_posts: [...action.posts] }
@@ -267,6 +278,28 @@ export default function reducer(state = {all_posts: []}, action){
     //comments cases ================================================
     case create_c: {
       const post_id = action.comment.post_id
+      const new_array = [action.comment, ...state[post_id].comments.all]
+      const new_comment = {id:action.comment.id, content:action.comment.content, post_id: action.comment.post_id, subcomments: action.comment.subcomments}
+
+      return {...state, [post_id]: {...state[post_id], comments: { ...state[post_id].comments, [action.comment.id]: new_comment, all: new_array}} }
+    }
+
+    // case get_c: {
+    //   const post_id = action.comment.post_id
+    //   return { ...state, [post_id]: {...state[post_id], comments: {...update_keys(action.comments), all: action.comments}} }
+    // }
+
+    case remove_c: {
+      const c_array = newState[action.post_id].comments.all
+      delete newState[action.post_id].comments[action.comment_id];
+      c_array.splice(c_array.findIndex(c => c.id === action.comment_id), 1);
+      newState[action.post_id].comments = { ...newState[action.post_id].comments, all: [...c_array] }
+      return newState
+    }
+
+    //subcomments cases ================================================
+    case create_s: {
+      const post_id = action.comment.post_id
       const new_array = [action.comment, ...state[post_id].comments]
       // console.log("<<<< comment structure in reducer, comment:: ", action.comment)
       // console.log("<<<< key path, comments array:: ", action.comment.post_id)
@@ -275,12 +308,12 @@ export default function reducer(state = {all_posts: []}, action){
       return {...state, [post_id]: {...state[post_id], comments: new_array} }
     }
 
-    case get_c: {
+    case get_s: {
       const post_id = action.comment.post_id
       return { ...state, [state[post_id]]: {...state[post_id], ...update_keys(action.comments)}, all_comments: [...action.comments] }
     }
 
-    case remove_c: {
+    case remove_s: {
       const c_array = newState[action.post_id].comments
       delete newState[action.post_id][action.comment_id];
       c_array.splice(c_array.findIndex(c => c.id === action.comment_id), 1);
@@ -288,21 +321,9 @@ export default function reducer(state = {all_posts: []}, action){
       return newState
     }
 
-    //subcomments cases ================================================
-    case create_s:
-      return {...state, [action.subcomment.id]: action.subcomment, all_subcomments: [action.subcomment, ...state.all_subcomments] }
-
-    case get_s:
-      return { ...state, ...update_keys(action.subcomments), all_subcomments: [...action.subcomments] }
-
-    case remove_s:
-      delete newState[action.subcomment_id];
-      newState.all_subcomments.splice(newState.all_subcomments.findIndex(s => s.id === action.subcomment_id), 1);
-      newState.all_subcomments = [...newState.all_subcomments]
-      return newState
 
 
-      //error cases ================================================
+    //error cases ================================================
     case set_error:
       return { ...state, error: action.error };
     default:
