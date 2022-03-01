@@ -6,16 +6,16 @@ import LoginForm from "./components/auth/LoginForm";
 import SignUpForm from "./components/auth/SignUpForm";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import NavBanner from "./components/NavBanner";
-import SplashPage from "./components/SplashPage"
+import SplashPage from "./components/SplashPage";
 import UsersList from "./components/UsersList";
 import User from "./components/User";
 import Header from "./components/Header";
-import Posts from './components/Posts';
-import Footer from './components/Footer';
-import Gif from './components/Gif';
+import Posts from "./components/Posts";
+import Footer from "./components/Footer";
+import Gif from "./components/Gif";
 
 import { authenticate } from "./store/session";
-import { get_all_posts } from "./store/posts"
+import { get_all_posts } from "./store/posts";
 
 function App() {
   const [loaded, setLoaded] = useState(false);
@@ -37,37 +37,33 @@ function App() {
     <BrowserRouter>
       <Header />
       <NavBanner />
-      <Switch>
-        <Route path="/login" exact={true}>
-          <LoginForm />
-        </Route>
-        <Route path="/sign-up" exact={true}>
-          <SignUpForm />
-        </Route>
-        <ProtectedRoute path="/users" exact={true}>
-          <UsersList />
-        </ProtectedRoute>
-        <ProtectedRoute path="/users/:userId" exact={true}>
-          <User />
-        </ProtectedRoute>
-        <ProtectedRoute path="/" exact={true}>
-          <SplashPage />
-        </ProtectedRoute>
-        <ProtectedRoute path="/gif-demo" exact={true}>
-          <div className="App">
-            <main className="App-main">
+      <div className="App">
+        <main className="App-main">
+          <Switch>
+            <Route path="/login" exact={true}>
+              <LoginForm />
+            </Route>
+            <Route path="/sign-up" exact={true}>
+              <SignUpForm />
+            </Route>
+            <ProtectedRoute path="/users" exact={true}>
+              <UsersList />
+            </ProtectedRoute>
+            <ProtectedRoute path="/users/:userId" exact={true}>
+              <User />
+            </ProtectedRoute>
+            <ProtectedRoute path="/" exact={true}>
+              <SplashPage />
+            </ProtectedRoute>
+            <ProtectedRoute path="/gif-demo" exact={true}>
               <Gif />
-            </main>
-          </div>
-        </ProtectedRoute>
-        <ProtectedRoute path="/posts-demo" exact={true}>
-          <div className="App">
-            <main className="App-main">
+            </ProtectedRoute>
+            <ProtectedRoute path="/posts-demo" exact={true}>
               <Posts />
-            </main>
-          </div>
-        </ProtectedRoute>
-      </Switch>
+            </ProtectedRoute>
+          </Switch>
+        </main>
+      </div>
       <Footer />
     </BrowserRouter>
   );
