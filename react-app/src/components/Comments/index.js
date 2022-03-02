@@ -21,14 +21,18 @@ export default function Comments({ props }) {
         const ids = { post_id: props.post_id, comment_id: comment.id };
 
         return (
-          <div>
+          <div className='single-comment'>
             {comment.content}
-            <button type="button" onClick={() => props.handle_delete_c(ids)}>delete</button>
-            <button type="button" onClick={() => props.handle_create_sub(comment.id)}>
-              new subcomment
+            <button type="button" onClick={() => props.handle_delete_c(ids)}>
+              delete
             </button>
-            {comment.subcomments
-              ? <SubComments props={child_props} /> : null}
+            {/* <button
+              type="button"
+              onClick={() => props.handle_create_sub(comment.id)}
+            >
+              new subcomment
+            </button> */}
+            {comment.subcomments ? <SubComments props={child_props} /> : null}
           </div>
         );
       })

@@ -236,6 +236,7 @@ export const delete_subcomment = (ids) => async (dispatch) => {
 }
 
 
+
 //reducer --------------------------------------------------------
 export default function reducer(state = {all_posts: []}, action){
   //helpers
@@ -254,12 +255,13 @@ export default function reducer(state = {all_posts: []}, action){
     return obj
   }
 
+
   //prep newState for multiple cases
   const newState = { ...state };
 
-
   switch (action.type) {
 
+    //NOTE: you can organize this code by create a helper reducer for comments
     //posts cases ================================================
     case create:
       const new_post = {id: action.post.id, content: action.post.content, comments: { all: action.post.comments}}
@@ -279,9 +281,12 @@ export default function reducer(state = {all_posts: []}, action){
     case create_c: {
       const post_id = action.comment.post_id
       const new_array = [action.comment, ...state[post_id].comments.all]
-      const new_comment = {id:action.comment.id, content:action.comment.content, post_id: action.comment.post_id, subcomments: action.comment.subcomments}
+      const new_comment = { ...action.comment, subcomments:
+                            { all: action.comment.subcomments } }
 
-      return {...state, [post_id]: {...state[post_id], comments: { ...state[post_id].comments, [action.comment.id]: new_comment, all: new_array}} }
+      return {...state, [post_id]:
+              {...state[post_id], comments:
+               {...state[post_id].comments, [action.comment.id]: new_comment, all: new_array}} }
     }
 
     // case get_c: {
@@ -298,28 +303,33 @@ export default function reducer(state = {all_posts: []}, action){
     }
 
     //subcomments cases ================================================
-    case create_s: {
-      const post_id = action.comment.post_id
-      const new_array = [action.comment, ...state[post_id].comments]
-      // console.log("<<<< comment structure in reducer, comment:: ", action.comment)
-      // console.log("<<<< key path, comments array:: ", action.comment.post_id)
-      // console.log("<<<< check new_array === state[post_id].comments:: ", new_array === state[post_id].comments)
 
-      return {...state, [post_id]: {...state[post_id], comments: new_array} }
-    }
+    //NOTE, YOU'LL NEED ID'S OF ALL OBJECTS TO PATH THIS FAR. WE ARE MISSING POST_ID IN SUBCOMMENT OBJECT RETURNED FROM DATABASE
 
-    case get_s: {
-      const post_id = action.comment.post_id
-      return { ...state, [state[post_id]]: {...state[post_id], ...update_keys(action.comments)}, all_comments: [...action.comments] }
-    }
+    // case create_s: {
+    //   const post_id = action.comment.post_id
+    //   const new_array = [action.subcomment, ...state[post_id].comments.subcomments.all]
+    //   // console.log("<<<< comment structure in reducer, comment:: ", action.comment)
+    //   // console.log("<<<< key path, comments array:: ", action.comment.post_id)
+    //   // console.log("<<<< check new_array === state[post_id].comments:: ", new_array === state[post_id].comments)
 
-    case remove_s: {
-      const c_array = newState[action.post_id].comments
-      delete newState[action.post_id][action.comment_id];
-      c_array.splice(c_array.findIndex(c => c.id === action.comment_id), 1);
-      newState[action.post_id].comments = [...c_array]
-      return newState
-    }
+    //   return {...state, [post_id]:
+    //           {...state[post_id], comments:
+    //             {...state[post_id].comments, state[post_id].comments[action.subcomment.id]: } } }
+    // }
+
+    // case get_s: {
+    //   const post_id = action.comment.post_id
+    //   return { ...state, [state[post_id]]: {...state[post_id], ...update_keys(action.comments)}, all_comments: [...action.comments] }
+    // }
+
+    // case remove_s: {
+    //   const c_array = newState[action.post_id].comments
+    //   delete newState[action.post_id][action.comment_id];
+    //   c_array.splice(c_array.findIndex(c => c.id === action.comment_id), 1);
+    //   newState[action.post_id].comments = [...c_array]
+    //   return newState
+    // }
 
 
 

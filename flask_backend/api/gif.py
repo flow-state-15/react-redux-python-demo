@@ -17,6 +17,6 @@ def get_index():
     index += 1
 
     # convert = str(index)
-    # padded = convert.zfill(5)
+    # padded = convert.zfill(5) # --> '00001'
 
     return {"frame_index": index}

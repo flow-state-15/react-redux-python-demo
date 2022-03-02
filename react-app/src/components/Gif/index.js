@@ -9,12 +9,13 @@ export default function Gif() {
   //state var as primitive
   const gif_frame = useSelector((state) => state.gif?.frame?.frame_index);
 
+
   //edge case
   const image = frame_array[0]
 
+
   const handle_click = () => {
     dispatch(increment_frame());
-    console.log(gif_frame)
   };
 
   return (

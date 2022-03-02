@@ -13,6 +13,8 @@ import {
 } from "../../store/posts";
 import Comments from "../Comments";
 
+
+
 export default function Posts() {
   const dispatch = useDispatch();
   const p_from_reducer = useSelector((state) => state.posts.all_posts);
@@ -48,7 +50,7 @@ export default function Posts() {
   const posts = p_from_reducer
     ? p_from_reducer.map((post) => {
         const child_props = {
-            post_id: post.id,
+          post_id: post.id,
           comments: post.comments.all,
           handle_create_c: handle_create_comment,
           handle_create_sub: handle_create_subcomment,
@@ -57,16 +59,26 @@ export default function Posts() {
         };
 
         return (
-          <li>
-            {post.content}
-            <button type="button" onClick={() => handle_delete_posts(post.id)}>
-              delete post
-            </button>
-            <button type="button" onClick={() => handle_create_comment(post.id)}>
-              new comment
-            </button>
+          <div className='single-post-wrap'>
+            <div className="single-post-header">
+                <h4>{post.content}</h4>
+                <button
+                    className='btn-small'
+                    type="button"
+                    onClick={() => handle_delete_posts(post.id)}
+                >
+                    delete post
+                </button>
+                <button
+                    className='btn-small'
+                    type="button"
+                    onClick={() => handle_create_comment(post.id)}
+                >
+                new comment
+                </button>
+            </div>
             {post.comments ? <Comments props={child_props} /> : null}
-          </li>
+          </div>
         );
       })
     : null;
@@ -88,7 +100,7 @@ export default function Posts() {
       >
         new post
       </button>
-      <ul className="posts-ul">{posts}</ul>
+      <div className="posts-list">{posts}</div>
     </div>
   );
 }

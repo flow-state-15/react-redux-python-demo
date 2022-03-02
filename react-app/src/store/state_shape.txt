@@ -1,0 +1,49 @@
+This file maps our state shape and paths we'll need in reducer
+Start at top level of state:
+
+
+state: {
+    sessions: {},
+    gif: {},
+    posts: {}
+}
+
+--> state.posts
+posts: {
+    id: {},
+    all_posts: []
+}
+
+--> state.posts[id]
+posts[id] = {
+    id: Number,
+    content: String,
+    comments: {}
+}
+
+--> state.posts[id].comments
+comments = {
+    id: {},
+    all: []
+}
+
+--> state.posts[id].comments[id]
+comments[id] = {
+    id: Number,
+    post_id: Number,
+    content: String,
+    subcomments: {}
+}
+
+--> state.posts[id].comments[id].subcomments
+subcomments = {
+    id: {},
+    all: []
+}
+
+--> state.posts[id].comments[id].subcomments[id]
+subcomments[id] = {
+    id: Number,
+    comment_id: Number,
+    content: String,
+}
