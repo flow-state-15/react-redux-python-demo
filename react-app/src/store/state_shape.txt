@@ -24,7 +24,7 @@ posts[id] = {
 --> state.posts[id].comments
 comments = {
     id: {},
-    all: []
+    all: [comment, comment]
 }
 
 --> state.posts[id].comments[id]

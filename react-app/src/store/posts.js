@@ -264,29 +264,65 @@ export default function reducer(state = {all_posts: []}, action){
     //NOTE: you can organize this code by create a helper reducer for comments
     //posts cases ================================================
     case create:
-      const new_post = {id: action.post.id, content: action.post.content, comments: { all: action.post.comments}}
-      return {...state, [action.post.id]: new_post, all_posts: [action.post, ...state.all_posts] }
+      const new_post = {
+        id: action.post.id,
+        content: action.post.content,
+        comments: { all: action.post.comments}
+        }
+      return {
+        ...state,
+        [action.post.id]: new_post,
+        all_posts: [action.post, ...state.all_posts]
+        }
 
     case get:
-      return { ...state, ...update_keys(action.posts), all_posts: [...action.posts] }
+      return {
+        ...state,
+        ...update_keys(action.posts),
+        all_posts: [...action.posts]
+        }
 
     case remove:
+      //delete existing kvp for this id
       delete newState[action.post_id];
+
+      //mutate a COPY of the old array, find object by id and splice it out
       newState.all_posts.splice(newState.all_posts.findIndex(p => p.id === action.post_id), 1);
+
+      //overwrite array key with new array value
       newState.all_posts = [...newState.all_posts]
+
       return newState
 
 
     //comments cases ================================================
     case create_c: {
+      //saving this path to a var saves space
       const post_id = action.comment.post_id
-      const new_array = [action.comment, ...state[post_id].comments.all]
-      const new_comment = { ...action.comment, subcomments:
-                            { all: action.comment.subcomments } }
 
-      return {...state, [post_id]:
-              {...state[post_id], comments:
-               {...state[post_id].comments, [action.comment.id]: new_comment, all: new_array}} }
+      //insert new comment into NEW array, and spread old values behind it(keeps newest comments on top)
+      const new_array = [action.comment, ...state[post_id].comments.all]
+
+      //shape your new comment object
+      const new_comment = {
+        ...action.comment,
+        subcomments: {
+          all: action.comment.subcomments
+          }
+        }
+
+      //return the new shape of this slice of state. spread all old objects into new objects
+      return {
+        ...state,
+        [post_id]: {
+          ...state[post_id],
+          comments: {
+            ...state[post_id].comments,
+            [action.comment.id]: new_comment,
+            all: new_array
+            }
+          }
+        }
     }
 
     // case get_c: {
@@ -295,10 +331,21 @@ export default function reducer(state = {all_posts: []}, action){
     // }
 
     case remove_c: {
-      const c_array = newState[action.post_id].comments.all
+      //saving path to object saves space. Note it is referencing the array in new state object.
+      const c_array = newState[action.post_id].comments.all;
+
+      //delete comment from new copy of state
       delete newState[action.post_id].comments[action.comment_id];
+
+      //mutate the array copy
       c_array.splice(c_array.findIndex(c => c.id === action.comment_id), 1);
-      newState[action.post_id].comments = { ...newState[action.post_id].comments, all: [...c_array] }
+
+      //construct the proper state shape
+      newState[action.post_id].comments = {
+        ...newState[action.post_id].comments,
+        all: [...c_array]
+        }
+        
       return newState
     }
 
