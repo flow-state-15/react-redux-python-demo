@@ -1,4 +1,4 @@
-FROM node:12 AS build-stage
+FROM node:16 AS build-stage
 
 WORKDIR /react-app
 COPY react-app/. .
@@ -13,7 +13,7 @@ RUN npm run build
 FROM python:3.9
 
 # Setup Flask environment
-ENV FLASK_APP=app
+ENV FLASK_APP=flask_backend
 ENV FLASK_ENV=production
 ENV SQLALCHEMY_ECHO=True
 
@@ -28,4 +28,4 @@ RUN pip install -r requirements.txt
 RUN pip install psycopg2
 
 # Run flask environment
-CMD gunicorn app:app
+CMD ["gunicorn", "flask_backend:app"]
