@@ -44,7 +44,7 @@ export default function Posts() {
         };
 
         return (
-          <div className="single-post-wrap">
+          <div className="single-post-wrap" key={post.id.toString()}>
             <div className="single-post-header">
               <h4>{post.content}</h4>
               <button
