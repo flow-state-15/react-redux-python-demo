@@ -48,7 +48,9 @@ CORS(app)
 def https_redirect():
     if os.environ.get('FLASK_ENV') == 'production':
         if request.headers.get('X-Forwarded-Proto') == 'http':
-            url = request.url.replace('http://', 'https://')
+            print("<<< in before_request, url before: >>>", request.url)
+            url = request.url.replace('http://', 'https://', 1)
+            print("<<< in before_request, url after: >>>", request.url)
             code = 301
             return redirect(url, code=code)
 
@@ -68,6 +70,8 @@ def inject_csrf_token(response):
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def react_root(path):
+    print("<<< in app.route('/'), before favicon:")
     if path == 'favicon.ico':
+        print("<<< in app.route('/'), after favicon:")
         return app.send_static_file('favicon.ico')
     return app.send_static_file('index.html')

@@ -269,10 +269,11 @@ export default function reducer(state = {all_posts: []}, action){
         content: action.post.content,
         comments: { all: action.post.comments}
         }
+        
       return {
         ...state,
         [action.post.id]: new_post,
-        all_posts: [action.post, ...state.all_posts]
+        all_posts: [new_post, ...state.all_posts]
         }
 
     case get:
@@ -345,7 +346,7 @@ export default function reducer(state = {all_posts: []}, action){
         ...newState[action.post_id].comments,
         all: [...c_array]
         }
-        
+
       return newState
     }
 
