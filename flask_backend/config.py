@@ -8,6 +8,7 @@ class Config:
     # (only 'postgresql') but heroku's postgres add-on automatically sets the
     # url in the hidden config vars to start with postgres.
     # so the connection uri must be updated here
-    SQLALCHEMY_DATABASE_URI = os.environ.get(
-        'DATABASE_URL').replace('postgres://', 'postgresql://')
+    # SQLALCHEMY_DATABASE_URI = os.environ.get(
+    #     'DATABASE_URL').replace('postgres://', 'postgresql://')
+    SQLALCHEMY_DATABASE_URI = 'postgresql://react_eod_admin:password@localhost/react_eod_db'
     SQLALCHEMY_ECHO = True

@@ -5,14 +5,9 @@ import {
   get_all_posts,
   delete_post,
   create_comment,
-  create_subcomment,
   delete_comment,
-  delete_subcomment,
-  get_all_comments,
-  get_all_subcomments,
 } from "../../store/posts";
 import Comments from "../Comments";
-
 
 
 export default function Posts() {
@@ -35,16 +30,8 @@ export default function Posts() {
     dispatch(create_comment({ content: "comment id", post_id }));
   };
 
-  const handle_create_subcomment = (comment_id) => {
-    dispatch(create_subcomment({ content: "subcomment id", comment_id }));
-  };
-
   const handle_delete_comment = (ids) => {
     dispatch(delete_comment(ids));
-  };
-
-  const handle_delete_subcomment = (subcomment_id) => {
-    dispatch(delete_subcomment(subcomment_id));
   };
 
   const posts = p_from_reducer
@@ -53,31 +40,31 @@ export default function Posts() {
           post_id: post.id,
           comments: post.comments.all,
           handle_create_c: handle_create_comment,
-          handle_create_sub: handle_create_subcomment,
           handle_delete_c: handle_delete_comment,
-          handle_delete_sub: handle_delete_subcomment,
         };
 
         return (
-          <div className='single-post-wrap'>
+          <div className="single-post-wrap">
             <div className="single-post-header">
-                <h4>{post.content}</h4>
-                <button
-                    className='btn-small'
-                    type="button"
-                    onClick={() => handle_delete_posts(post.id)}
-                >
-                    delete post
-                </button>
-                <button
-                    className='btn-small'
-                    type="button"
-                    onClick={() => handle_create_comment(post.id)}
-                >
+              <h4>{post.content}</h4>
+              <button
+                className="btn-small"
+                type="button"
+                onClick={() => handle_delete_posts(post.id)}
+              >
+                delete post
+              </button>
+              <button
+                className="btn-small"
+                type="button"
+                onClick={() => handle_create_comment(post.id)}
+              >
                 new comment
-                </button>
+              </button>
             </div>
-            {post.comments ? <Comments props={child_props} /> : null}
+            {/* ------>> test these two conditional render methods <<------ */}
+            {post.comments.all.length > 0 && <Comments props={child_props} />}
+            {post.comments.all ? <Comments props={child_props} /> : null}
           </div>
         );
       })
