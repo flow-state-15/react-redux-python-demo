@@ -9,13 +9,11 @@ const set_error = "error/NEW_ERROR";
 const create_c = "comment/CREATE";
 const get_c = "comment/GET";
 const remove_c = "comment/DELETE";
-// const set_error = "error/NEW_ERROR";
 
 //subcomment switch cases
 const create_s = "subcomment/CREATE";
 const get_s = "subcomment/GET";
 const remove_s = "subcomment/DELETE";
-// const set_error = "error/NEW_ERROR";
 
 
 //actions
@@ -56,11 +54,6 @@ const del_comment_action = (ids) => ({
   ...ids
 })
 
-// const new_error = (error) => ({
-//   type: set_error,
-//   error,
-// });
-
 //subcomment actions --------------------------------------------------------
 const add_subcomment = (subcomment) => ({
   type: create_s,
@@ -77,11 +70,6 @@ const del_subcomment_action = (ids) => ({
   ...ids
 })
 
-// const new_error = (error) => ({
-//   type: set_error,
-//   error,
-// });
-
 
 //thunks
 //posts thunks --------------------------------------------------------
@@ -97,7 +85,6 @@ export const create_post = (post) => async (dispatch) => {
 
   if (response.ok) {
     const post = await response.json();
-    console.log("<<<< new post from backend, post:: ", post)
     dispatch(add_post(post));
   } else {
     const error = {
@@ -109,7 +96,6 @@ export const create_post = (post) => async (dispatch) => {
 };
 
 export const get_all_posts = () => async (dispatch) => {
-  console.log("<<<< DISPATCHING GET ALL POSTS >>>>")
 
   const response = await fetch("/api/posts/")
   if(response.ok){
@@ -125,7 +111,6 @@ export const get_all_posts = () => async (dispatch) => {
 }
 
 export const delete_post = (post_id) => async (dispatch) => {
-  console.log("delete_post", post_id);
   const response = await fetch(`/api/posts/delete/post/${post_id}`, {
     method: "DELETE",
   });
@@ -160,7 +145,6 @@ export const create_comment = (comment) => async (dispatch) => {
 };
 
 export const get_all_comments = () => async (dispatch) => {
-  console.log("<<<< DISPATCHING GET ALL COMMENTS >>>>")
 
   const response = await fetch("/api/posts/comments")
   if(response.ok){
@@ -176,7 +160,6 @@ export const get_all_comments = () => async (dispatch) => {
 }
 
 export const delete_comment = (ids) => async (dispatch) => {
-  console.log("delete_comment", ids.comment_id);
   const response = await fetch(`/api/posts/delete/comment/${ids.comment_id}`, {
     method: "DELETE",
   });
@@ -225,7 +208,7 @@ export const get_all_subcomments = () => async (dispatch) => {
 }
 
 export const delete_subcomment = (ids) => async (dispatch) => {
-  console.log("delete_subcomment", ids.subcomment_id);
+
   const response = await fetch(`/api/posts/delete/subcomment/${ids.subcomment_id}`, {
     method: "DELETE",
   });
@@ -244,7 +227,6 @@ export default function reducer(state = {all_posts: []}, action){
   const update_keys = (array) => {
     const obj = {}
     array.forEach(i => {
-      console.log(i)
       obj[i.id] = i
       if (i.hasOwnProperty("comments")){
         obj[i.id].comments = { ...update_keys(i.comments), all: i.comments}
@@ -252,9 +234,12 @@ export default function reducer(state = {all_posts: []}, action){
         obj[i.id].subcomments = { ...update_keys(i.subcomments), all: i.subcomments}
       }
     });
+    console.log("\narray param in update_keys(), array:: ", array)
+    console.log("\nfilled object in update_keys(), obj:: ", obj)
     return obj
   }
 
+  //NOTE: whenever accessing ${state}, (previous state variable), copy it first and mutate the copy. This is critical for redux to work properly. Additionally, spread syntax is a highly performant way to make a copy of an object. The problem with spread is that the copy is shallow, so you must manually spread every level of a nested object.
 
   //prep newState for multiple cases
   const newState = { ...state };
@@ -264,12 +249,14 @@ export default function reducer(state = {all_posts: []}, action){
     //NOTE: you can organize this code by create a helper reducer for comments
     //posts cases ================================================
     case create:
+      //create structure of new object in state, not using the object returned from flask:
       const new_post = {
         id: action.post.id,
         content: action.post.content,
         comments: { all: action.post.comments}
         }
-        
+
+      //Normalize new object into slice of state, and insert new object into appropriate place in new array literal:
       return {
         ...state,
         [action.post.id]: new_post,
@@ -277,6 +264,8 @@ export default function reducer(state = {all_posts: []}, action){
         }
 
     case get:
+
+      //You may need to normalize objects from database if your store is not in sync with backend. Normalize redux using a helper function:
       return {
         ...state,
         ...update_keys(action.posts),
@@ -284,13 +273,13 @@ export default function reducer(state = {all_posts: []}, action){
         }
 
     case remove:
-      //delete existing kvp for this id
+      //Delete existing kvp for this id. Remember to mutate the NEW state object:
       delete newState[action.post_id];
 
-      //mutate a COPY of the old array, find object by id and splice it out
+      //Mutate a COPY of the old array, find object by id and splice it out:
       newState.all_posts.splice(newState.all_posts.findIndex(p => p.id === action.post_id), 1);
 
-      //overwrite array key with new array value
+      //Overwrite array key with new array value:
       newState.all_posts = [...newState.all_posts]
 
       return newState
@@ -301,18 +290,19 @@ export default function reducer(state = {all_posts: []}, action){
       //saving this path to a var saves space
       const post_id = action.comment.post_id
 
-      //insert new comment into NEW array, and spread old values behind it(keeps newest comments on top)
+      //insert new comment into NEW array, and spread old values behind it(keep newest comments on top when component maps this):
       const new_array = [action.comment, ...state[post_id].comments.all]
 
-      //shape your new comment object
+      //Shape your new comment object:
       const new_comment = {
         ...action.comment,
         subcomments: {
+          //NOTE: you don't need a new array literal here since array came from action and not old state.
           all: action.comment.subcomments
           }
         }
 
-      //return the new shape of this slice of state. spread all old objects into new objects
+      //Return the new shape of this slice of state. Spread all old state objects into new objects. Making a deep copy of nested state can get confusing; try to organize your syntax to make it easier to keep track of where you are in the object.
       return {
         ...state,
         [post_id]: {
@@ -326,22 +316,34 @@ export default function reducer(state = {all_posts: []}, action){
         }
     }
 
-    // case get_c: {
-    //   const post_id = action.comment.post_id
-    //   return { ...state, [post_id]: {...state[post_id], comments: {...update_keys(action.comments), all: action.comments}} }
-    // }
+    //NOTE: we aren't using this case in our components.
+    case get_c: {
+      //Save yourself some space:
+      const post_id = action.comment.post_id
+
+      //Return a normalized deep copy of state:
+      return { ...state,
+              [post_id]: {
+                ...state[post_id],
+                comments: {
+                  ...update_keys(action.comments),
+                  all: action.comments
+                }
+              }
+            }
+    }
 
     case remove_c: {
       //saving path to object saves space. Note it is referencing the array in new state object.
       const c_array = newState[action.post_id].comments.all;
 
-      //delete comment from new copy of state
+      //Delete comment from new copy of state:
       delete newState[action.post_id].comments[action.comment_id];
 
-      //mutate the array copy
+      //Mutate the array copy only. Remove object from array copy:
       c_array.splice(c_array.findIndex(c => c.id === action.comment_id), 1);
 
-      //construct the proper state shape
+      //Construct the proper state shape:
       newState[action.post_id].comments = {
         ...newState[action.post_id].comments,
         all: [...c_array]
@@ -384,6 +386,7 @@ export default function reducer(state = {all_posts: []}, action){
     //error cases ================================================
     case set_error:
       return { ...state, error: action.error };
+
     default:
       return state;
   }
