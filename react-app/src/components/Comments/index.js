@@ -16,7 +16,7 @@ export default function Comments({ props }) {
         const ids = { post_id: props.post_id, comment_id: comment.id };
 
         return (
-          <div className='single-comment' key={comment.id.toString()}>
+          <div className='single-comment' key={'comment' + comment.id.toString()}>
             {comment.content}
             <button type="button" onClick={() => props.handle_delete_c(ids)}>
               delete
