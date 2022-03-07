@@ -1,4 +1,4 @@
-FROM node:14 AS build-stage
+FROM node:12 AS build-stage
 
 WORKDIR /react-app
 COPY react-app/. .
@@ -21,7 +21,7 @@ EXPOSE 8000
 
 WORKDIR /var/www
 COPY . .
-COPY --from=build-stage /react-app/build/* app/static/
+COPY --from=build-stage /react-app/build/* flask_backend/static/
 
 # Install Python Dependencies
 RUN pip install -r requirements.txt

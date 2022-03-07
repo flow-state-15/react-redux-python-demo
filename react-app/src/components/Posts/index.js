@@ -44,7 +44,7 @@ export default function Posts() {
         };
 
         return (
-          <div className="single-post-wrap" key={post.id.toString()}>
+          <div className="single-post-wrap" key={'post' + post.id.toString()}>
             <div className="single-post-header">
               <h4>{post.content}</h4>
               <button
@@ -63,7 +63,7 @@ export default function Posts() {
               </button>
             </div>
             {/* ------>> test these two conditional render methods <<------ */}
-            {post.comments.all.length > 0 && <Comments props={child_props} />}
+            {/* {post.comments.all.length > 0 && <Comments props={child_props} />} */}
             {post.comments.all ? <Comments props={child_props} /> : null}
           </div>
         );
