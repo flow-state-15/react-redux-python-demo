@@ -1,11 +1,16 @@
-This file maps our state shape and paths we'll need in reducer
+This file maps our state shape and paths we'll need in reducer.
 Start at top level of state:
 
 
 state: {
-    sessions: {},
+    session: {},
     gif: {},
     posts: {}
+}
+
+--> state.gif
+gif: {
+    frame: Number
 }
 
 --> state.posts

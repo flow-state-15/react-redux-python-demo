@@ -1,13 +1,17 @@
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import session from './session';
-import gif from './gif';
-import posts from './posts';
+// import gif from './gif';
+// import posts from './posts';
+import posts2 from './posts_code_along'
+import gif2 from './gif_code_along'
 
 const rootReducer = combineReducers({
   session,
-  gif,
-  posts,
+  // gif,
+  // posts,
+  gif2,
+  posts2
 });
 
 

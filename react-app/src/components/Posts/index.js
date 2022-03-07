@@ -6,13 +6,17 @@ import {
   delete_post,
   create_comment,
   delete_comment,
-} from "../../store/posts";
+} from "../../store/posts_code_along";
 import Comments from "../Comments";
 
 
 export default function Posts() {
   const dispatch = useDispatch();
-  const p_from_reducer = useSelector((state) => state.posts.all_posts);
+
+  //Only the currently imported hooks are allowed and necessary for this task.
+  //Using you knowledge of state shape, define a path to the object you need.
+  //TODO: Hook into store here:
+
 
   const handle_create_post = () => {
     dispatch(create_post({ content: "post id" }));

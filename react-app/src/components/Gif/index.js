@@ -1,16 +1,17 @@
-import { increment_frame } from '../../store/gif'
-
 import { useDispatch, useSelector } from 'react-redux';
+
+import { increment_frame } from '../../store/gif_code_along'
 import frame_array from '../../assets/frames'
 
 export default function Gif() {
   const dispatch = useDispatch();
 
-  //state var as primitive
-  const gif_frame = useSelector((state) => state.gif?.frame?.frame_index);
+  //NOTE: state variable is a primitive, making rerendering easy. No other hooks are necessary for responsive rendering.
+  //TODO: hook into store here
 
 
-  //edge case
+
+  //edge case for when state is empty
   const image = frame_array[0]
 
 
