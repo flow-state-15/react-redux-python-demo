@@ -256,7 +256,10 @@ export default function reducer(state = {all_posts: []}, action){
         comments: { all: action.post.comments}
         }
 
+<<<<<<< Updated upstream
       //Normalize new object into slice of state, and insert new object into appropriate place in new array literal:
+=======
+>>>>>>> Stashed changes
       return {
         ...state,
         [action.post.id]: new_post,
