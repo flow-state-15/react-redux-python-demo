@@ -5,31 +5,10 @@ import React from "react"
 
 import frame_array from '../../assets/frames'
 
+//lets pretend this is an object you imported or something
+const bad_ref = { index: 0 }
 
 export default function Gif() {
-  //todo: using state improperly ->
-
-  //react is based on object equality. react will do a === on state and the DOM tree
-  //recall the gotchas you learned when doing a === on objects
-
-  const bad_ref = { index: 0 }
-
-  const [compState, setCompState] = React.useState(bad_ref)
-
-  const manual_click = () => {
-    bad_ref.index = bad_ref.index + 1
-
-    console.log("logging bad_ref.index::", bad_ref.index)
-
-    setCompState(bad_ref)
-
-    console.log("logging state with bad ref:: ", compState)
-
-    //bad reference: we are mutating an existing object
-    //reference in memory is the same
-    //react runs oldState === newState and it is true, so nothing happens
-  }
-
 
   //TODO: step 1. start here using Redux. useSelector alone will cause rerenders
   // const dispatch = useDispatch();
@@ -56,6 +35,52 @@ export default function Gif() {
       //   } else return 0
       // })
     // };
+
+
+
+  //todo: HERE BE DRAGONS! ->  using state improperly
+  //react component lifecycle is based on object equality. react will do a === on state to decide when to rerender
+  //recall the gotchas you learned when doing a === on objects
+
+  const [compState, setCompState] = React.useState(bad_ref)
+
+  const manual_click = () => {
+    //scenario 1:
+    //dont modify objects outside of react state!!
+    bad_ref.index = bad_ref.index + 1
+    setCompState(bad_ref)
+
+    //scenario 2:
+    // setCompState(state => {
+    //   console.log("running useState callback!", state)
+    //   state.index += 1
+    //   const modified_state = state
+    //   console.log("same object in memory? ", state === modified_state)
+    //   return modified_state
+    // })
+
+    //bad reference: we are mutating an existing object
+    //reference in memory is the same
+    //react runs oldState === newState and it is true, so nothing happens
+
+
+    //todo: how to fix this
+    //copy old state and return a new reference in memory
+    //the logs will show the asynchronous nature of useState hook
+    // setCompState(state => {
+
+    //   console.log("logging previous state:: ", state)
+    //   const modified_state = {...state, index: state.index + 1}
+    //   console.log("same object in memory? ", state === modified_state)
+
+    //   return modified_state
+    // })
+    console.log("I run before the useState callback!", compState)
+  }
+
+  React.useEffect(() => {
+    console.log("useEffect runs before render so you can see the change!", compState)
+  }, [compState]);
 
 
   //TODO for good times
@@ -102,7 +127,7 @@ export default function Gif() {
 
         //todo: component state source
         //from bad_ref:
-        src={frame_array[compState]}
+        src={frame_array[compState.index]}
 
         //from redux:
         // src={
