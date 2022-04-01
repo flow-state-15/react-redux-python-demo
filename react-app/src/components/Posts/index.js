@@ -13,6 +13,7 @@ import Comments from "../Comments";
 export default function Posts() {
   const dispatch = useDispatch();
   const p_from_reducer = useSelector((state) => state.posts.all_posts);
+  // const p_from_reducer = useSelector((state) => state.posts.values().sort())
 
   const handle_create_post = () => {
     dispatch(create_post({ content: "post id" }));
