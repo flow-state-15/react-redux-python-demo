@@ -16,3 +16,4 @@ RUN pip install psycopg2
 
 # Run flask environment
 CMD gunicorn flask_backend:app
+
