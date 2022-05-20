@@ -86,6 +86,7 @@ export const create_post = (post) => async (dispatch) => {
   if (response.ok) {
     const post = await response.json();
     dispatch(add_post(post));
+    return post
   } else {
     const error = {
       status_code: response.status,
@@ -234,8 +235,7 @@ export default function reducer(state = {all_posts: []}, action){
         obj[i.id].subcomments = { ...update_keys(i.subcomments), all: i.subcomments}
       }
     });
-    console.log("\narray param in update_keys(), array:: ", array)
-    console.log("\nfilled object in update_keys(), obj:: ", obj)
+    console.log('<<- recursively normalizing state -->>')
     return obj
   }
 
@@ -264,7 +264,6 @@ export default function reducer(state = {all_posts: []}, action){
         }
 
     case get:
-
       //You may need to normalize objects from database if your store is not in sync with backend. Normalize redux using a helper function:
       return {
         ...state,
@@ -343,7 +342,7 @@ export default function reducer(state = {all_posts: []}, action){
       //Mutate the array copy only. Remove object from array copy:
       c_array.splice(c_array.findIndex(c => c.id === action.comment_id), 1);
 
-      //Construct the proper state shape:
+      //Construct the proper state shape using NEW references in memory:
       newState[action.post_id].comments = {
         ...newState[action.post_id].comments,
         all: [...c_array]
@@ -380,8 +379,6 @@ export default function reducer(state = {all_posts: []}, action){
     //   newState[action.post_id].comments = [...c_array]
     //   return newState
     // }
-
-
 
     //error cases ================================================
     case set_error:

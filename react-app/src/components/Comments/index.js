@@ -26,5 +26,7 @@ export default function Comments({ props }) {
       })
     : null;
 
-  return !(all_comments == null) > 0 && <div>{element}</div>;
+  console.log('checking render! running before return in COMMENT')
+
+  return !(all_comments == null) && <div>{element}</div>;
 }

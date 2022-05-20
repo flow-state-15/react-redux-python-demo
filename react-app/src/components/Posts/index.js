@@ -15,8 +15,8 @@ export default function Posts() {
   const p_from_reducer = useSelector((state) => state.posts.all_posts);
   // const p_from_reducer = useSelector((state) => state.posts.values().sort())
 
-  const handle_create_post = () => {
-    dispatch(create_post({ content: "post id" }));
+  const handle_create_post = async () => {
+    await dispatch(create_post({ content: "post id" }));
   };
 
   const handle_get_posts = () => {
@@ -70,6 +70,9 @@ export default function Posts() {
         );
       })
     : null;
+
+
+  console.log('checking render! running before return in POSTS')
 
   return (
     <div className="posts-wrapper">

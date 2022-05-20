@@ -9,7 +9,6 @@ class Post(db.Model):
 
     comments = db.relationship("Comment", back_populates="post", cascade="all, delete")
 
-
     def to_dict(self):
         return {
             'id': self.id,

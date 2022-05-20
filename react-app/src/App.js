@@ -27,9 +27,13 @@ function App() {
       dispatch(get_all_posts());
       setLoaded(true);
     })();
+    console.log('in useeffect, after iife')
   }, [dispatch]);
 
+  console.log('in body of function')
+
   if (!loaded) {
+    console.log('in !loaded, loaded:: ', loaded)
     return null;
   }
 

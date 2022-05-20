@@ -15,6 +15,7 @@ export default function Gif() {
   //note: state var is a primitive; makes it guaranteed to rerender
   const gif_frame = useSelector((state) => state.gif?.frame?.frame_index);
 
+
   //edge case
   const image = frame_array[0]
 
@@ -27,16 +28,6 @@ export default function Gif() {
   // //same effect but with local component state instead
   // // todo: note the use of a callback in useState. it fixes race conditions
 
-  // const [compState, setCompState] = React.useState(0)
-
-  //   const manual_click = () => {
-
-  //     setCompState(prev => {
-  //       if(prev < frame_array.length-1){
-  //         return prev + 1
-  //       } else return 0
-  //     })
-  //   };
 
 
 
@@ -69,19 +60,19 @@ export default function Gif() {
   //   //todo: how to fix this
   //   //copy old state and return a new reference in memory
   //   //the logs will show the asynchronous nature of useState hook
-  //   // setCompState(state => {
+  //   setCompState(state => {
 
-  //   //   console.log("logging previous state:: ", state)
-  //   //   const modified_state = {...state, index: state.index + 1}
-  //   //   console.log("same object in memory? ", state === modified_state)
+  //     console.log("logging previous state:: ", state)
+  //     const modified_state = {...state, index: state.index + 1}
+  //     console.log("same object in memory? ", state === modified_state)
 
-  //   //   return modified_state
-  //   // })
+  //     return modified_state
+  //   })
   //   console.log("I run before the useState callback!", compState)
   // }
 
   // React.useEffect(() => {
-  //   console.log("useEffect runs before render so you can see the change!", compState)
+  //   console.log("useEffect runs before next render so you can see the change!", compState)
   // }, [compState]);
 
 
@@ -93,12 +84,16 @@ export default function Gif() {
   // React.useEffect(() => {
   //   if((vidStart === true) && (intID === 0)){
   //       const newIntID = setInterval(() => {
+  //         //using local state for index
   //         setCompStateAuto(prev => {
   //           if(prev < frame_array.length-1){
   //             return prev + 1
   //           } else return 0
   //         })
-  //       }, 150);
+
+  //         //using database to get index
+  //         // dispatch(increment_frame());
+  //       }, 1);
   //       setIntID(newIntID)
   //   } else if ((vidStart === false) && intID){
   //     clearInterval(intID);
@@ -108,7 +103,7 @@ export default function Gif() {
 
 
 
-  //pro tip: to correctly log async code, you need a useEffect
+  // //pro tip: to correctly log async code, you need a useEffect
   // React.useEffect(() => {
   //   console.log("intervalID, vidStart:: ", intID, vidStart)
   // }, [vidStart, intID]);
@@ -117,6 +112,14 @@ export default function Gif() {
   //   setVidStart(prev => !prev)
   // }
 
+  React.useEffect(() => {
+    console.log('I am the effect');
+    return () => {
+      console.log('I run after re-render, but before the next useEffect');
+    };
+  });
+
+  console.log('did i run before the useEffect??')
 
   return (
     <div className="gif-wrapper">
@@ -141,6 +144,9 @@ export default function Gif() {
 
         //from local auto:
         // src={frame_array[compStateAuto]}
+
+        //from redux auto:
+        // src={frame_array[gif_frame]}
       />
       <span>manual frames:</span>
       <button type="button" className="btn" onClick={manual_click}>
@@ -155,6 +161,8 @@ export default function Gif() {
       {/* //todo: switch up the var depending on your source */}
       <span> Using a redux useSelector!  Frame: {gif_frame} </span>
       {/* <span> Using local useState!  Frame: {compState} </span> */}
+      {/* <span> Using local useState super fast!  Frame: {compStateAuto} </span> */}
+      {/* <span> Using dispatch and useSelector super fast!  Frame: {gif_frame} </span> */}
       {/* <span> Using a bad object reference!  Frame: {compState.index} </span> */}
     </div>
   );

@@ -16,8 +16,10 @@ const new_error = (error) => ({
 
 //thunks
 export const increment_frame = () => async (dispatch) => {
+  console.time();
   const response = await fetch(`/api/gif/get-index`);
-
+  console.timeEnd();
+  console.log('-----------------')
   if (response.ok) {
     const frame_index = await response.json();
     dispatch(increment(frame_index));
@@ -35,15 +37,17 @@ export default function reducer(state = {}, action){
   switch (action.type) {
     case switch_frame:
       return {
-        ...state,
+        ...state, 
         frame: action.frame_index
       };
-    case set_error:
-      return { ...state, error: action.error };
+    // case set_error:
+    //   return { ...state, error: action.error };
     default:
       return state;
   }
 };
+
+
 
 // //apply redux middlewares to make reducer work
 // const composedEnhancer = composeWithDevTools(applyMiddleware(thunkMiddleware));
