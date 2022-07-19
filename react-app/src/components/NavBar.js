@@ -4,6 +4,8 @@ import { NavLink } from 'react-router-dom';
 import LogoutButton from './auth/LogoutButton';
 
 const NavBar = () => {
+  React.useEffect(()=>{
+  },[])
   return (
     <nav>
       <ul>

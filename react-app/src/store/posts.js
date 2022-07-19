@@ -15,6 +15,8 @@ const create_s = "subcomment/CREATE";
 const get_s = "subcomment/GET";
 const remove_s = "subcomment/DELETE";
 
+const REMOVE_USER = 'session/REMOVE_USER';
+
 
 //actions
 //post actions --------------------------------------------------------
@@ -220,6 +222,11 @@ export const delete_subcomment = (ids) => async (dispatch) => {
 }
 
 
+// const obj = { key1: 'string', key2: ['string2'], key3: []}
+// const newObj = {...obj, key2: [...obj.key2]}; // {key1: 'string', key2:['string2'], key2: [...obj.key2]}
+
+// obj.key2 === newObj.key2
+
 
 //reducer --------------------------------------------------------
 export default function reducer(state = {all_posts: []}, action){
@@ -383,6 +390,10 @@ export default function reducer(state = {all_posts: []}, action){
     //error cases ================================================
     case set_error:
       return { ...state, error: action.error };
+
+    case REMOVE_USER:
+      console.log('in remove user case in posts reducer')
+      return {all_posts: []}
 
     default:
       return state;

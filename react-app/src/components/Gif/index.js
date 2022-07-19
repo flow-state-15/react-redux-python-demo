@@ -101,6 +101,9 @@ export default function Gif() {
   //   }
   // }, [vidStart, intID]);
 
+  // const vid_click = () => {
+  //   setVidStart(prev => !prev)
+  // }
 
 
   // //pro tip: to correctly log async code, you need a useEffect
@@ -108,18 +111,12 @@ export default function Gif() {
   //   console.log("intervalID, vidStart:: ", intID, vidStart)
   // }, [vidStart, intID]);
 
-  // const vid_click = () => {
-  //   setVidStart(prev => !prev)
-  // }
 
-  React.useEffect(() => {
-    console.log('I am the effect');
-    return () => {
-      console.log('I run after re-render, but before the next useEffect');
-    };
-  });
+  // React.useEffect(() => {
+  //   console.log('I am the effect');
+  // });
 
-  console.log('did i run before the useEffect??')
+  // console.log('Non async code in component body will always run first!')
 
   return (
     <div className="gif-wrapper">

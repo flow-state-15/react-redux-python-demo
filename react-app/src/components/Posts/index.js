@@ -1,3 +1,4 @@
+import React from 'react'
 import { useDispatch, useSelector } from "react-redux";
 
 import {
@@ -14,6 +15,8 @@ export default function Posts() {
   const dispatch = useDispatch();
   const p_from_reducer = useSelector((state) => state.posts.all_posts);
   // const p_from_reducer = useSelector((state) => state.posts.values().sort())
+
+  // useSelector:: oldReturn === newReturn -> false -> render
 
   const handle_create_post = async () => {
     await dispatch(create_post({ content: "post id" }));
@@ -70,9 +73,6 @@ export default function Posts() {
         );
       })
     : null;
-
-
-  console.log('checking render! running before return in POSTS')
 
   return (
     <div className="posts-wrapper">
