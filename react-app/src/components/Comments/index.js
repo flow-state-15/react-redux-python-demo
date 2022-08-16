@@ -6,6 +6,7 @@ export default function Comments({ props }) {
   //Knowing your state is shaped the way you want it, key into the specific object you need to render your component and pass into props, if needed:
 
   //NOTE: if your conditional is working properly in your parent, you'll know this path is valid and won't return the wrong type.
+
   const all_comments = useSelector(
     (state) => state.posts[props.post_id].comments.all
   );
