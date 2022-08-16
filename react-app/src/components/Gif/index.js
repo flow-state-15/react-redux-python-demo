@@ -93,7 +93,7 @@ export default function Gif() {
 
   //         //using database to get index
   //         // dispatch(increment_frame());
-  //       }, 1);
+  //       }, 0.05);
   //       setIntID(newIntID)
   //   } else if ((vidStart === false) && intID){
   //     clearInterval(intID);
@@ -106,7 +106,7 @@ export default function Gif() {
   // }
 
 
-  // //pro tip: to correctly log async code, you need a useEffect
+  //pro tip: to correctly log async code, you need a useEffect
   // React.useEffect(() => {
   //   console.log("intervalID, vidStart:: ", intID, vidStart)
   // }, [vidStart, intID]);

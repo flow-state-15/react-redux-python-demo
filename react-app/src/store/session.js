@@ -98,12 +98,16 @@ export const signUp = (username, email, password) => async (dispatch) => {
 }
 
 export default function reducer(state = initialState, action) {
+  console.log('invoked SESSION reducer, type: ', action.type)
   switch (action.type) {
     case SET_USER:
+      console.log('matched the type! returning new state')
       return { user: action.payload }
     case REMOVE_USER:
+      console.log('matched the type! returning new state')
       return { user: null }
     default:
+      console.log('no match: returning old state')
       return state;
   }
 }

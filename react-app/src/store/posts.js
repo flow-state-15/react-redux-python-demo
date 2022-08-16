@@ -230,6 +230,7 @@ export const delete_subcomment = (ids) => async (dispatch) => {
 
 //reducer --------------------------------------------------------
 export default function reducer(state = {all_posts: []}, action){
+  console.log('invoked POST reducer, type: ', action.type)
   //helpers
   //normalize an array into object kvp's
   const update_keys = (array) => {
@@ -256,6 +257,7 @@ export default function reducer(state = {all_posts: []}, action){
     //NOTE: you can organize this code by create a helper reducer for comments
     //posts cases ================================================
     case create:
+      console.log('matched the type! returning new state')
       //create structure of new object in state, not using the object returned from flask:
       const new_post = {
         id: action.post.id,
@@ -271,6 +273,7 @@ export default function reducer(state = {all_posts: []}, action){
         }
 
     case get:
+      console.log('matched the type! returning new state')
       //You may need to normalize objects from database if your store is not in sync with backend. Normalize redux using a helper function:
       return {
         ...state,
@@ -279,6 +282,7 @@ export default function reducer(state = {all_posts: []}, action){
         }
 
     case remove:
+      console.log('matched the type! returning new state')
       //Delete existing kvp for this id. Remember to mutate the NEW state object:
       delete newState[action.post_id];
 
@@ -293,6 +297,7 @@ export default function reducer(state = {all_posts: []}, action){
 
     //comments cases ================================================
     case create_c: {
+      console.log('matched the type! returning new state')
       //saving this path to a var saves space
       const post_id = action.comment.post_id
 
@@ -324,6 +329,7 @@ export default function reducer(state = {all_posts: []}, action){
 
     //NOTE: we aren't using this case in our components.
     case get_c: {
+      console.log('matched the type! returning new state')
       //Save yourself some space:
       const post_id = action.comment.post_id
 
@@ -340,6 +346,7 @@ export default function reducer(state = {all_posts: []}, action){
     }
 
     case remove_c: {
+      console.log('matched the type! returning new state')
       //saving path to object saves space. Note it is referencing the array in new state object.
       const c_array = newState[action.post_id].comments.all;
 
@@ -396,6 +403,7 @@ export default function reducer(state = {all_posts: []}, action){
       return {all_posts: []}
 
     default:
+      console.log('no match: returning old state')
       return state;
   }
 };

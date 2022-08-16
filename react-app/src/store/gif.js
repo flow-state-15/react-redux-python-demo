@@ -34,15 +34,18 @@ export const increment_frame = () => async (dispatch) => {
 
 //reducer
 export default function reducer(state = {}, action){
+  console.log('invoked GIF reducer, type: ', action.type)
   switch (action.type) {
     case switch_frame:
+      console.log('matched the type! returning new state')
       return {
-        ...state, 
+        ...state,
         frame: action.frame_index
       };
     // case set_error:
     //   return { ...state, error: action.error };
     default:
+      console.log('no match: returning old state')
       return state;
   }
 };
